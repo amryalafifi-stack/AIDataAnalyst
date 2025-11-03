@@ -15,6 +15,15 @@ The **Data Analyst & AI Dashboard** is an interactive Streamlit web app that all
 
 This tool is designed for **analysts, business professionals, and non-technical users** to quickly explore datasets and derive actionable insights without writing code.
 
+
+Python serves as both the front-end and back-end engine:
+
+Front-end (Streamlit): Provides a user-friendly interface where anyone can interact with data, select chart types, view AI insights, and download filtered CSVs.
+
+Back-end (Python + Pandas + Plotly + OpenAI API): Handles all data processing, filtering, aggregation, visualization, and communicates with OpenAI to generate human-like analysis and business recommendations.
+
+This approach allows the app to be self-contained, fast, and highly customizable, while making sophisticated data analytics accessible to users without any programming experience.
+
 ---
 
 ## 1️⃣ Upload Your CSV
