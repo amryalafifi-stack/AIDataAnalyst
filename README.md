@@ -2,7 +2,9 @@
 
 *A sneak peek at the AI-powered data exploration dashboard.*
 
-<img width="1639" height="819" alt="Screenshot 2025-11-03 at 12 01 16 PM" src="https://github.com/user-attachments/assets/ec369bb7-5f3c-4bc9-b5a6-64c56810b88c" />
+
+<img width="1651" height="758" alt="Screenshot 2025-11-03 at 12 00 04 PM" src="https://github.com/user-attachments/assets/528e9232-f150-4dc7-b64c-8626aa94206d" />
+
 
 
 ---
@@ -24,7 +26,11 @@ This tool is designed for **analysts, business professionals, and non-technical 
 
 *Example: Upload a Superstore dataset to explore sales, customers, and regions.*
 
-![Upload CSV Example](./images/upload_csv.png)
+
+<img width="1702" height="639" alt="Screenshot 2025-11-03 at 11 41 58 AM" src="https://github.com/user-attachments/assets/ef79d36a-00d1-4b21-a9bb-9f1993e9460a" />
+
+
+
 
 ---
 
@@ -39,7 +45,14 @@ This tool is designed for **analysts, business professionals, and non-technical 
 
 > The AI ensures that **only the relevant rows are included** in filtered results.
 
-![AI Query Example](./images/ai_query.png)
+<img width="1605" height="147" alt="Screenshot 2025-11-03 at 12 00 19 PM" src="https://github.com/user-attachments/assets/4e1dec47-8c05-4855-bcda-a0c1534223fd" />
+
+
+
+Filtered Data Preview
+
+<img width="1609" height="353" alt="Screenshot 2025-11-03 at 12 00 30 PM" src="https://github.com/user-attachments/assets/c0c5da54-207d-4b7b-838c-1ca94567da35" />
+
 
 ---
 
@@ -57,7 +70,9 @@ This tool is designed for **analysts, business professionals, and non-technical 
   - **Top N values** if applicable
   - Color-coded metrics for clarity
 
-![Visualization Example](./images/visualization.png)
+<img width="1637" height="536" alt="Screenshot 2025-11-03 at 12 00 49 PM" src="https://github.com/user-attachments/assets/ce6ce93c-a57e-4a8f-a71d-e7a28092055d" />
+
+
 
 ---
 
@@ -69,19 +84,14 @@ This tool is designed for **analysts, business professionals, and non-technical 
   - Opportunities and risks
   - Clear actionable recommendations for next steps
 - AI summaries are generated from the **filtered dataset**, ensuring accurate insights.
+- 
 
-![AI Summary Example](./images/ai_summary.png)
+<img width="1639" height="819" alt="Screenshot 2025-11-03 at 12 01 16 PM" src="https://github.com/user-attachments/assets/282432c3-793e-4b6b-83f7-a679761da3b4" />
 
----
 
-## 5️⃣ Download Filtered Data
-
-- After filtering and visualization, click **Download Filtered CSV**.
-- The downloaded file contains **only the rows matching your AI query**, ready for reporting or further analysis.
-
-![Download CSV Example](./images/download_csv.png)
 
 ---
+
 
 ## Installation
 
