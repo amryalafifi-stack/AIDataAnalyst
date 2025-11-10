@@ -7,6 +7,12 @@
 
 
 
+*LINK TO THE PROJECT*
+
+https://aidataanalyst-knb6ogwr2xnacsy5tzo3h2.streamlit.app/
+
+
+
 ---
 
 ## Project Overview
