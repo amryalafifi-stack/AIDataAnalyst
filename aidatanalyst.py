@@ -1,4 +1,4 @@
-
+import os
 import pandas as pd
 import streamlit as st
 import plotly.express as px
@@ -6,11 +6,9 @@ from openai import OpenAI
 from io import BytesIO
 import base64
 
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=OPENAI_API_KEY)
-
-
+# -----------------------------
+# STREAMLIT APP CONFIG
+# -----------------------------
 st.set_page_config(page_title="AI Dashboard By Amr Al-Afifi", layout="wide", page_icon="📊")
 st.markdown(
     """
@@ -22,11 +20,22 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
 st.title("📊 AI Powered Dashboard")
 st.write("Upload a CSV and ask your data (e.g., 'Top 5 states by Sales'). The AI will filter, visualize, and summarize.")
 
+# -----------------------------
+# OPENAI API SETUP
+# -----------------------------
+OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY")  # <- Use Streamlit Secrets
+if not OPENAI_API_KEY:
+    st.error("❌ OpenAI API key not found! Add it in Streamlit Secrets.")
+    st.stop()
 
+client = OpenAI(api_key=OPENAI_API_KEY)
+
+# -----------------------------
+# UPLOAD CSV
+# -----------------------------
 uploaded_file = st.file_uploader("Upload CSV (any)", type=["csv"])
 if not uploaded_file:
     st.info("Upload a CSV file to start.")
@@ -41,7 +50,9 @@ except Exception as e:
 st.subheader("Data Preview (first 5 rows)")
 st.dataframe(df.head())
 
-
+# -----------------------------
+# NATURAL LANGUAGE QUERY
+# -----------------------------
 nl_query = st.text_input("Ask your data (e.g., 'Top 5 states by Sales')", value="")
 
 if st.button("Run Query"):
@@ -50,7 +61,6 @@ if st.button("Run Query"):
         st.stop()
 
     st.info("Parsing query and generating filtered dataset...")
-
 
     prompt = f"""
 You are a Python data analyst. Based on this user query, write a Pandas filtering or aggregation operation.
@@ -64,7 +74,9 @@ Requirements:
 - filtered_df must contain ONLY the rows requested
 - Do not include explanations, only code
 """
+
     try:
+        # Call OpenAI API to generate code
         resp = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
@@ -73,19 +85,24 @@ Requirements:
 
         code_snippet = resp.choices[0].message.content.strip("`python\n").strip("`")
         local_vars = {}
-        exec(code_snippet, {"df": df, "pd": pd}, local_vars)
-        filtered_df = local_vars.get("filtered_df", None)
 
-        if not isinstance(filtered_df, pd.DataFrame):
-            st.error("AI did not produce a valid filtered DataFrame.")
+        # Safely execute AI-generated code
+        try:
+            exec(code_snippet, {"df": df, "pd": pd}, local_vars)
+            filtered_df = local_vars.get("filtered_df", None)
+            if filtered_df is None or not isinstance(filtered_df, pd.DataFrame):
+                raise ValueError("AI did not return a valid DataFrame.")
+        except Exception as e:
+            st.error(f"❌ Error executing AI-generated code: {e}")
             st.code(code_snippet)
             st.stop()
 
-     
+        # -----------------------------
+        # SHOW FILTERED DATA
+        # -----------------------------
         st.subheader("Filtered Data Preview (first 5 rows)")
         st.dataframe(filtered_df.head())
 
-      
         csv_data = filtered_df.to_csv(index=False)
         st.download_button(
             label="📥 Download Filtered CSV",
@@ -94,10 +111,11 @@ Requirements:
             mime="text/csv",
         )
 
-       
+        # -----------------------------
+        # VISUALIZATION
+        # -----------------------------
         numeric_cols = filtered_df.select_dtypes(include='number').columns.tolist()
         categorical_cols = filtered_df.select_dtypes(include='object').columns.tolist()
-
         chart_type = st.selectbox("Choose chart type", ["Auto", "bar", "line", "pie", "hist", "scatter"])
 
         fig = None
@@ -129,7 +147,9 @@ Requirements:
         if fig:
             st.plotly_chart(fig, use_container_width=True)
 
-      
+        # -----------------------------
+        # AI SUMMARY
+        # -----------------------------
         st.subheader("📝 AI Summary & Recommended Next Steps")
         summary_prompt = f"""
 You are a Senior Business Consultant. The filtered dataset has {len(filtered_df)} rows and columns: {list(filtered_df.columns)}.
@@ -144,6 +164,6 @@ Provide a detailed analysis in two sections:
         st.write(summary_resp.choices[0].message.content)
 
     except Exception as e:
-        st.error(f"❌ Error executing AI-generated code: {e}")
+        st.error(f"❌ Unexpected error: {e}")
         if 'code_snippet' in locals():
             st.code(code_snippet)
